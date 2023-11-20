@@ -1,0 +1,8 @@
+{%extends 'app/base.html'%}
+
+{%block content%}
+    <h1>Список отелей</h1>
+    {% for hotel in hotels%}
+        <p>{{hotel.hotel_name}}</p>
+    {%endfor%}
+{%endblock%}
