@@ -1,0 +1,12 @@
+{%extends 'app/base.html'%}
+
+{%block content%}
+    <h1>Список номеров</h1>
+    {% for apartament in apartaments%}
+        <p>{{apartament.name}}</p>
+        <p>{{apartament.category}}</p>
+        <p>{{apartament.hotel}}</p>
+        <p>{{apartament.price}}</p>
+        <img src="{{apartament.img.url}}" alt="Фото номера">
+    {%endfor%}
+{%endblock%}

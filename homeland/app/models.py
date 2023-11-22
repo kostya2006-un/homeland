@@ -20,6 +20,7 @@ class Hotel(models.Model):
     description = models.TextField()
     address = models.TextField()
     full = models.BooleanField(default=False)
+    img = models.ImageField(upload_to='hotel_img',default='1.jpg')
 
     def __str__(self):
         return self.hotel_name
@@ -35,7 +36,6 @@ class HotelCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     available_count = models.PositiveIntegerField(default=0)
 
-
 class Apartament(models.Model):
     name = models.CharField(max_length=100)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
@@ -43,7 +43,7 @@ class Apartament(models.Model):
     description = models.TextField()
     price = models.PositiveIntegerField()
     max_people = models.PositiveIntegerField()
-
+    img = models.ImageField(upload_to='apartament_img',default='1.jpg')
     def __str__(self):
         return self.name
 
