@@ -1,6 +1,11 @@
 {%extends 'app/base.html'%}
 
 {%block content%}
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Отсортировать</button>
+    </form>
     <h1>Список номеров</h1>
     {% for apartament in apartaments%}
         <p>{{apartament.name}}</p>

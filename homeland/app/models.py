@@ -31,10 +31,11 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-class HotelCategory(models.Model):
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    available_count = models.PositiveIntegerField(default=0)
+class NumberPeople(models.Model):
+    number = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.number
 
 class Apartament(models.Model):
     name = models.CharField(max_length=100)
@@ -42,9 +43,10 @@ class Apartament(models.Model):
     hotel = models.ForeignKey(Hotel,on_delete=models.CASCADE)
     description = models.TextField()
     price = models.PositiveIntegerField()
-    max_people = models.PositiveIntegerField()
+    max_people = models.ForeignKey(NumberPeople,on_delete=models.CASCADE)
     img = models.ImageField(upload_to='apartament_img',default='1.jpg')
+
     def __str__(self):
-        return self.name
+        return f'{self.name} | {self.hotel}'
 
 

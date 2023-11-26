@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from .models import Hotel,Apartament
-from .forms import CountryForm
+from .forms import CountryForm,PeopleNumberForm
 class IndexView(View):
     template_name = 'app/index.html'
 
@@ -38,8 +38,20 @@ class ApartamentView(View):
     def get(self,request,pk):
         hotel = Hotel.objects.get(pk = pk)
         apartaments = Apartament.objects.filter(hotel = hotel)
-
+        form = PeopleNumberForm()
         context = {
+            'form':form,
             'apartaments':apartaments,
         }
         return render(request,self.template_name,context)
+    def post(self,request,pk):
+
+        form = PeopleNumberForm(data = request.POST)
+        if form.is_valid():
+            number = form.cleaned_data['number']
+
+            context = {
+                'form':form,
+                'apartaments':Apartament.objects.filter(max_people = number,pk=pk),
+            }
+            return render(request,self.template_name,context)
