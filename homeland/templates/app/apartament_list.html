@@ -13,5 +13,6 @@
         <p>{{apartament.hotel}}</p>
         <p>{{apartament.price}}</p>
         <img src="{{apartament.img.url}}" alt="Фото номера">
+        <a href="{%url 'order' apartament.id%}">Забронировать</a>
     {%endfor%}
 {%endblock%}

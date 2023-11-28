@@ -1,0 +1,10 @@
+{%extends 'app/base.html'%}
+
+{%block content%}
+    <h1>Добро пожаловать, {{ request.user.username }}!</h1>
+    <p>Ваш баланс внутренней валюты: {{ profile.money }}</p>
+
+    <form action="{% url 'increment_balance' %}" method="get">
+        <button type="submit">Увеличить баланс на $1000</button>
+    </form>
+{%endblock%}

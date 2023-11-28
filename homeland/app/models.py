@@ -1,6 +1,11 @@
+import django
+from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
+from django.utils import timezone
+
+
 class Country(models.Model):
     country_name = models.CharField(max_length=20)
 
@@ -49,4 +54,17 @@ class Apartament(models.Model):
     def __str__(self):
         return f'{self.name} | {self.hotel}'
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    money = models.PositiveIntegerField(default=10000)
 
+class Order(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    apartament = models.ForeignKey(Apartament,on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile,on_delete=models.CASCADE)
+    arrive_date = models.DateField(default=timezone.now)
+    leave_date = models.DateField(default=timezone.now)
+
+
+    def __str__(self):
+        return f"Заказ для {self.user.username} - Цена: {self.apartament.name}"
