@@ -1,0 +1,10 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+  <h2>Вы уверены, что хотите отменить этот заказ?</h2>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Удалить</button>
+    <a href="{% url 'profile' %}">Отмена</a>
+  </form>
+{% endblock %}

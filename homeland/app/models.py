@@ -1,4 +1,3 @@
-import django
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -24,7 +23,6 @@ class Hotel(models.Model):
     country = models.ForeignKey(Country,on_delete=models.CASCADE)
     description = models.TextField()
     address = models.TextField()
-    full = models.BooleanField(default=False)
     img = models.ImageField(upload_to='hotel_img',default='1.jpg')
 
     def __str__(self):
@@ -54,17 +52,16 @@ class Apartament(models.Model):
     def __str__(self):
         return f'{self.name} | {self.hotel}'
 
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    apartament = models.ForeignKey(Apartament,on_delete=models.CASCADE)
+    arrive_date = models.DateField(default=timezone.now)
+    leave_date = models.DateField(default=timezone.now)
+    total_amount = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return f"Заказ для {self.user.username} - Отель и номер: {self.apartament.name}"
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     money = models.PositiveIntegerField(default=10000)
-
-class Order(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    apartament = models.ForeignKey(Apartament,on_delete=models.CASCADE)
-    profile = models.ForeignKey(Profile,on_delete=models.CASCADE)
-    arrive_date = models.DateField(default=timezone.now)
-    leave_date = models.DateField(default=timezone.now)
-
-
-    def __str__(self):
-        return f"Заказ для {self.user.username} - Цена: {self.apartament.name}"

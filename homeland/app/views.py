@@ -1,6 +1,9 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views import View
-from .models import Hotel,Apartament,Profile
+from django.views.generic import DeleteView
+from .models import Hotel,Apartament,Profile,Order
 from .forms import CountryForm,PeopleNumberForm,DateForm
 
 class IndexView(View):
@@ -63,9 +66,10 @@ class ProfileView(View):
 
     def get(self,request):
         profile = Profile.objects.get(user=request.user)
-
+        orders = Order.objects.filter(user=request.user)
         context = {
             'profile':profile,
+            'orders':orders,
         }
 
         return render(request,self.template_name,context)
@@ -92,11 +96,46 @@ class OrderView(View):
 
     def post(self,request,pk):
         form = DateForm(data=request.POST)
+        apartament = Apartament.objects.get(pk=pk)
+        profile = Profile.objects.get(user=request.user)
         if form.is_valid():
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date']
 
-            context = {
-                'form':form,
-            }
-            return render(request,self.template_name,context)
+            days = (end_date-start_date).days
+            total_price = apartament.price * days
+            if profile.money < total_price:
+                messages.error(request, "Недостаточно средств")
+            else:
+                profile.money -= total_price
+                profile.save()
+                Order.objects.create(
+                    user = request.user,
+                    apartament = apartament,
+                    arrive_date = start_date,
+                    leave_date = end_date,
+                    total_amount = total_price,
+                )
+
+                return redirect('profile')
+        context = {
+            'form':form,
+            'apartament': apartament,
+        }
+        return render(request,self.template_name,context)
+
+class OrderDeleteView(DeleteView):
+    model = Order
+    template_name = 'app/order_confirm_delete.html'
+    success_url = reverse_lazy('profile')
+
+    def form_valid(self, form):
+        order = self.get_object()
+        total_amount = order.total_amount
+        profile = order.user.profile
+
+        # Возврат денег пользователю
+        profile.money += total_amount
+        profile.save()
+
+        return super().form_valid(form)
