@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import DeleteView
-from .models import Hotel,Apartament,Profile,Order
+from .models import Hotel,Apartament,Profile,Order,Status
 from .forms import CountryForm,PeopleNumberForm,DateForm
 
 class IndexView(View):
@@ -115,6 +115,7 @@ class OrderView(View):
                     arrive_date = start_date,
                     leave_date = end_date,
                     total_amount = total_price,
+                    status=Status.objects.get_or_create(status="неначатый")[0]
                 )
 
                 return redirect('profile')

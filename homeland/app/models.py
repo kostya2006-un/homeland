@@ -51,6 +51,11 @@ class Apartament(models.Model):
 
     def __str__(self):
         return f'{self.name} | {self.hotel}'
+class Status(models.Model):
+    status = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.status
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -58,7 +63,7 @@ class Order(models.Model):
     arrive_date = models.DateField(default=timezone.now)
     leave_date = models.DateField(default=timezone.now)
     total_amount = models.PositiveIntegerField(default=0)
-
+    status = models.ForeignKey(Status,on_delete=models.CASCADE,default=None)
     def __str__(self):
         return f"Заказ для {self.user.username} - Отель и номер: {self.apartament.name}"
 

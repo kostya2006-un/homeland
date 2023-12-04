@@ -1,12 +1,105 @@
-{%extends 'app/base.html'%}
+{% extends 'app/base.html' %}
 
-{%block content%}
-    {% if user.is_authenticated %}
-        <a href="{% url 'account_logout' %}">Выход</a>
-        <a href="{% url 'profile'%}">Профиль</a>
-    {% else %}
-        <a href="{% url 'account_signup' %}">Регистрация</a>
-        <a href="{% url 'account_login' %}">Вход</a>
-    {% endif %}
-    <a href="{% url 'hotels_list'%}">Отели</a>
-{%endblock%}
+{% block content %}
+    {% load bootstrap5 %}
+
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url("https://mdbootstrap.com/img/new/fluid/city/018.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.7); /* Полупрозрачный цвет навбара */
+            position: relative; /* Относительное позиционирование для навбара */
+            z-index: 1; /* Поднять навбар над остальным содержимым */
+        }
+
+        .navbar-brand {
+            color: #fff; /* Цвет текста логотипа навбара */
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff; /* Цвет текста ссылок навбара */
+        }
+
+        /* Фоновое окно, занимающее всю страницу */
+        #intro::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Цвет и уровень прозрачности */
+            z-index: -1; /* Устанавливаем "под" основное содержимое */
+        }
+
+        #intro {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            position: relative;
+            z-index: 0; /* Устанавливаем "под" фоновым окном */
+        }
+
+        #intro .mask {
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 2; /* Поднимаем выше фонового окна */
+        }
+
+        #intro .text-white {
+            max-width: 600px;
+            padding: 20px;
+        }
+
+    </style>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'profile'%}">Профиль</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'account_logout' %}">Выйти</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'account_login' %}">Войти</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'account_signup' %}">Регистрация</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="intro">
+        <div class="mask">
+            <div class="container text-white">
+                <h1 class="mb-3">Путешествуйте с Homeland</h1>
+                <h5 class="mb-4">Найдите идеальное место вашего отдых вместе с нами</h5>
+                <a class="btn btn-outline-light btn-lg m-2"
+                    href="{% url 'hotels_list'%}"
+                    target="_blank" role="button">Найти отель прямо сейчас</a>
+            </div>
+        </div>
+    </div>
+    <!-- Background image -->
+{% endblock %}
