@@ -5,6 +5,7 @@ from django.views import View
 from django.views.generic import DeleteView
 from .models import Hotel,Apartament,Profile,Order,Status
 from .forms import CountryForm,PeopleNumberForm,DateForm
+from django.utils import timezone
 
 class IndexView(View):
     template_name = 'app/index.html'
@@ -101,24 +102,29 @@ class OrderView(View):
         if form.is_valid():
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date']
-
-            days = (end_date-start_date).days
-            total_price = apartament.price * days
-            if profile.money < total_price:
-                messages.error(request, "Недостаточно средств")
+            today = timezone.now().date()
+            if start_date < today:
+                messages.error(request, "Дата заезда не может быть раньше сегодняшней даты.")
+            elif end_date <= start_date:
+                messages.error(request, "Дата выезда должна быть позже даты заезда.")
             else:
-                profile.money -= total_price
-                profile.save()
-                Order.objects.create(
-                    user = request.user,
-                    apartament = apartament,
-                    arrive_date = start_date,
-                    leave_date = end_date,
-                    total_amount = total_price,
-                    status=Status.objects.get_or_create(status="неначатый")[0]
-                )
+                days = (end_date - start_date).days
+                total_price = apartament.price * days
 
-                return redirect('profile')
+                if profile.money < total_price:
+                    messages.error(request, "Недостаточно средств")
+                else:
+                    profile.money -= total_price
+                    profile.save()
+                    Order.objects.create(
+                        user=request.user,
+                        apartament=apartament,
+                        arrive_date=start_date,
+                        leave_date=end_date,
+                        total_amount=total_price,
+                        status=Status.objects.get_or_create(status="неначатый")[0]
+                    )
+                    return redirect('profile')
         context = {
             'form':form,
             'apartament': apartament,

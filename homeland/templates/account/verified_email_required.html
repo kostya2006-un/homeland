@@ -2,22 +2,17 @@
 
 {% load i18n %}
 
-{% block head_title %}{% trans "Verify Your Email Address" %}{% endblock head_title %}
+{% block head_title %}{% trans "Подтверждение вашего email" %}{% endblock head_title %}
 
 {% block content %}
-<h1>{% trans "Verify Your Email Address" %}</h1>
+<h1>{% trans "Подтверждение вашего email" %}</h1>
 
 {% url 'account_email' as email_url %}
 
-<p>{% blocktrans %}This part of the site requires us to verify that
-you are who you claim to be. For this purpose, we require that you
-verify ownership of your email address. {% endblocktrans %}</p>
+<p>{% blocktrans %}Для доступа к этой части сайта нам необходимо подтвердить вашу личность. Для этого мы требуем подтверждения владения вашим email-адресом. {% endblocktrans %}</p>
 
-<p>{% blocktrans %}We have sent an email to you for
-verification. Please click on the link inside that email. If you do not see the verification email in your main inbox, check your spam folder. Otherwise
-contact us if you do not receive it within a few minutes.{% endblocktrans %}</p>
+<p>{% blocktrans %}Мы отправили вам электронное письмо для подтверждения. Пожалуйста, перейдите по ссылке внутри этого письма. Если вы не видите письмо с подтверждением в основной папке входящих сообщений, проверьте папку со спамом. В противном случае свяжитесь с нами, если вы не получите его в течение нескольких минут.{% endblocktrans %}</p>
 
-<p>{% blocktrans %}<strong>Note:</strong> you can still <a href="{{ email_url }}">change your email address</a>.{% endblocktrans %}</p>
-
+<p>{% blocktrans %}<strong>Примечание:</strong> вы все равно можете <a href="{{ email_url }}">изменить свой email-адрес</a>.{% endblocktrans %}</p>
 
 {% endblock content %}

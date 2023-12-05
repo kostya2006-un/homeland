@@ -65,7 +65,7 @@ class Order(models.Model):
     total_amount = models.PositiveIntegerField(default=0)
     status = models.ForeignKey(Status,on_delete=models.CASCADE,default=None)
     def __str__(self):
-        return f"Заказ для {self.user.username} - Отель и номер: {self.apartament.name}"
+        return f"Заказ для {self.user.first_name} {self.user.last_name} - Отель и номер: {self.apartament.name}"
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

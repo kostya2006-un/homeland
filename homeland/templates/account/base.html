@@ -1,43 +1,41 @@
 {% load i18n %}
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block head_title %}{% endblock head_title %}</title>
+    {% load bootstrap5 %}
+
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
     {% block extra_head %}
     {% endblock extra_head %}
-  </head>
-  <body>
-    {% block body %}
+</head>
+<body>
+{% block body %}
 
-    {% if messages %}
-    <div>
-      <strong>{% trans "Messages:" %}</strong>
-      <ul>
-        {% for message in messages %}
-        <li>{{message}}</li>
-        {% endfor %}
-      </ul>
+{% if messages %}
+<div class="container">
+    <div class="alert alert-info" role="alert">
+        <strong>{% trans "Messages:" %}</strong>
+        <ul class="list-unstyled mb-0">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
     </div>
-    {% endif %}
+</div>
+{% endif %}
 
-    <div>
-      <strong>{% trans "Menu:" %}</strong>
-      <ul>
-        {% if user.is_authenticated %}
-        <li><a href="{% url 'account_email' %}">{% trans "Change Email" %}</a></li>
-        <li><a href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a></li>
-        {% else %}
-        <li><a href="{% url 'account_login' %}">{% trans "Sign In" %}</a></li>
-        <li><a href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a></li>
-        {% endif %}
-      </ul>
-    </div>
+<div class="container mt-4">
     {% block content %}
     {% endblock content %}
-    {% endblock body %}
-    {% block extra_body %}
-    {% endblock extra_body %}
-  </body>
+</div>
+
+{% endblock body %}
+{% block extra_body %}
+{% endblock extra_body %}
+</body>
 </html>

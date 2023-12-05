@@ -1,22 +1,36 @@
 {% extends "account/base.html" %}
 
 {% load i18n %}
+{% load bootstrap5 %}
 
-{% block head_title %}{% trans "Confirm Access" %}{% endblock head_title %}
+{% block head_title %}{% trans "Подтвердить доступ" %}{% endblock head_title %}
 
 {% block content %}
+<style>
+    body {
+        background-color: hsl(218deg 50% 91%);
+    }
 
-<h1>{% trans "Confirm Access" %}</h1>
+    .container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
 
-<p>{% blocktranslate %}To safeguard the security of your account, please enter your password:{% endblocktranslate %}</p>
+<div class="container">
+    <h1>{% trans "Подтвердить доступ" %}</h1>
 
-<form class="reauthenticate" method="POST" action="{% url 'account_reauthenticate' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <button type="submit">{% trans "Confirm" %}</button>
-</form>
+    <p>{% blocktranslate %}Для обеспечения безопасности вашей учетной записи, введите ваш пароль:{% endblocktranslate %}</p>
 
+    <form class="reauthenticate" method="POST" action="{% url 'account_reauthenticate' %}">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <button class="btn btn-primary" type="submit">{% trans "Подтвердить" %}</button>
+    </form>
+</div>
 {% endblock content %}
