@@ -160,3 +160,5 @@ ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/'
 ACCOUNT_FORMS = {
     'signup': 'homeland.forms.CustomSignupForm',
 }
+#celery and redis
+CELERY_BROKER_URL = 'redis://redis:6379'

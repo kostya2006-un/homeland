@@ -6,11 +6,12 @@ from django.views.generic import DeleteView
 from .models import Hotel,Apartament,Profile,Order,Status
 from .forms import CountryForm,PeopleNumberForm,DateForm
 from django.utils import timezone
-
+from .tasks import text_task
 class IndexView(View):
     template_name = 'app/index.html'
 
     def get(self,request):
+        text_task.delay()
         return render(request,self.template_name)
 
 class HotelListView(View):
