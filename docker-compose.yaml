@@ -8,6 +8,8 @@ services:
     restart: always
     build:
       context: .
+    volumes:
+      - ./homeland:/homeland
     ports:
       - "8000:8000"
     command: ["python","manage.py","runserver","0.0.0.0:8000"]
@@ -19,3 +21,11 @@ services:
     volumes:
       - ./homeland:/homeland
     command: ["celery", "-A", "homeland", "worker","-l", "INFO"]
+
+  celery-beats:
+    restart: always
+    build:
+      context: .
+    volumes:
+      - ./homeland:/homeland
+    command: [ "celery", "-A", "homeland", "beat","-l", "INFO","--scheduler","django_celery_beat.schedulers:DatabaseScheduler" ]
