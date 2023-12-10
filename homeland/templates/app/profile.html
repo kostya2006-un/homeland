@@ -14,6 +14,7 @@
         {{order.arrive_date}}
         {{order.leave_date}}
         {{order.total_amount}}
+        {{order.status}}
         <a href="{% url 'order_delete' order.id %}">Отменить бронь</a>
         <p></p>
     {%endfor%}

@@ -29,3 +29,13 @@ services:
     volumes:
       - ./homeland:/homeland
     command: [ "celery", "-A", "homeland", "beat","-l", "INFO","--scheduler","django_celery_beat.schedulers:DatabaseScheduler" ]
+
+  flower:
+    restart: always
+    build:
+      context: .
+    volumes:
+      - ./homeland:/homeland
+    ports:
+      - "5555:5555"
+    command: ["celery","-A", "homeland", "flower"]
