@@ -1,18 +1,52 @@
-{%extends 'app/base.html'%}
+{% extends 'app/base.html' %}
 
-{%block content%}
-<form action="{% url 'hotels_list' %}" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Отсортировать</button>
-</form>
-    <h1>Список отелей</h1>
-    {% for hotel in hotels%}
-        <p>{{hotel.hotel_name}}</p>
-        <p>{{hotel.city}}</p>
-        <p>{{hotel.country}}</p>
-        <img src="{{hotel.img.url}}" alt="Фото отеля">
-        <a href="{%url 'apartaments' hotel.id%}">Список номеров</a>
-        <hr>
-    {%endfor%}
-{%endblock%}
+{% block content %}
+    {% load bootstrap5 %}
+
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <div class="container mt-4">
+        <form action="{% url 'hotels_list' %}" method="post">
+            {% csrf_token %}
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    {{ form }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary">Отсортировать</button>
+                </div>
+            </div>
+        </form>
+        <div class="row mb-3">
+            <div class="col-md-2">
+                <a href="{% url 'hotels_list' %}" class="btn btn-secondary">Отменить фильтры</a>
+            </div>
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            {% for hotel in hotels %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div style="height: 250px; overflow: hidden;">
+                            <img src="{{ hotel.img.url }}" class="card-img-top img-fluid" alt="Фото отеля">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">{{ hotel.hotel_name }}</h5>
+                            <p class="card-text"><strong>Город:</strong> {{ hotel.city }}</p>
+                            <p class="card-text"><strong>Страна:</strong> {{ hotel.country }}</p>
+                            <p class="card-text"><strong>Цены от:</strong> {{ hotel.get_min_price }} руб. за ночь</p>
+                            <div class="d-grid gap-2">
+                                <a href="{% url 'hotel_detail' hotel.pk %}" class="btn btn-primary mt-2">Подробнее об отеле</a>
+                                <a href="{% url 'apartaments' hotel.id %}" class="btn btn-success">Выбрать этот отель</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

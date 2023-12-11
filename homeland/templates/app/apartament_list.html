@@ -13,6 +13,7 @@
             {{ form }}
         </div>
         <button type="submit" class="btn btn-primary">Отсортировать</button>
+
     </form>
 
         <h1 class="mt-4">Список номеров</h1>
@@ -32,6 +33,7 @@
                                     <p class="card-text">{{ apartament.price }}</p>
                                     <p class="card-text">{{apartament.description}}</p>
                                     <a href="{% url 'order' apartament.id %}" class="btn btn-primary">Забронировать</a>
+                                    <a href="{% url 'apartament_detail' apartament.pk %}">Подробнее об номере</a>
                                 </div>
                             </div>
                         </div>

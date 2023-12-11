@@ -1,0 +1,25 @@
+{%extends 'app/base.html'%}
+
+{%block content%}
+    {% load bootstrap5 %}
+
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <img src="{{ apartament.img.url }}" class="img-fluid mb-3" alt="Фото номера">
+            </div>
+            <div class="col-md-6">
+                <h2>{{ apartament.name }}</h2>
+                <p><strong>Отель:</strong> {{ apartament.hotel }}</p>
+                <p><strong>Категория:</strong> {{ apartament.category }}</p>
+                <p><strong>Описание:</strong></p>
+                <p>{{ apartament.description }}</p>
+                <p><strong>Цена за ночь:</strong> {{ apartament.price }}</p>
+                <p><strong>Максимальное число гостей:</strong> {{ apartament.max_people }}</p>
+            </div>
+        </div>
+    </div>
+{%endblock%}

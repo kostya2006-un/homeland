@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
+from django.db.models import Min
 from django.utils import timezone
 
 
@@ -27,6 +28,10 @@ class Hotel(models.Model):
 
     def __str__(self):
         return self.hotel_name
+
+    def get_min_price(self):
+        min_price = self.apartament_set.aggregate(min_price=Min('price'))['min_price']
+        return min_price if min_price is not None else 0
 
 class Category(models.Model):
     name = models.CharField(max_length=55)

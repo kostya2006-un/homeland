@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import DeleteView
+from django.views.generic import DeleteView, DetailView
 from .models import Hotel,Apartament,Profile,Order,Status
 from .forms import CountryForm,PeopleNumberForm,DateForm
 from django.utils import timezone
@@ -46,6 +46,10 @@ class HotelListView(View):
             }
             return render(request,self.template_name,context)
 
+class Hotel_Detail_View(DetailView):
+    template_name = 'app/hotel_detail.html'
+    model = Hotel
+    context_object_name = 'hotel'
 
 class ApartamentView(View):
 
@@ -70,7 +74,10 @@ class ApartamentView(View):
                 'apartaments':Apartament.objects.filter(max_people = number,pk=pk),
             }
             return render(request,self.template_name,context)
-
+class Apartament_Detail_View(DetailView):
+    template_name = 'app/apartament_detail.html'
+    model = Apartament
+    context_object_name = 'apartament'
 class ProfileView(View):
 
     template_name = 'app/profile.html'
