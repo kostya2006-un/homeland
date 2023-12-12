@@ -1,10 +1,48 @@
-{%extends 'app/base.html'%}
+{% extends 'app/base.html' %}
 
-{%block content%}
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-    <input type="submit" value="Рассчитать стоимость и заказать">
-    </form>
-    {{apartament}}
-{%endblock%}
+{% block content %}
+    {% load bootstrap5 %}
+
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <div class="container mt-4">
+        <h1>Номер</h1>
+        <div class="row">
+            <div class="col-md-12 mt-4">
+                <div class="card mb-3">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ apartament.img.url }}" class="img-fluid rounded-start" alt="Фото номера">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Название номера: {{ apartament.name }}</h5>
+                                <p class="card-text">Категория: {{ apartament.category }}</p>
+                                <p class="card-text">Цена за ночь: {{ apartament.price }} руб.</p>
+                                <p class="card-text">Максимальное число людей: {{ apartament.max_people }}</p>
+                                <p class="card-text">Описание: {{ apartament.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <h1>Заполните форму чтобы продолжить</h1>
+        </div>
+        <div class="container text-center mt-4">
+            <form method="post" class="p-4">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form }}
+                </div>
+                <button type="submit" name="calculate_order" value="calculate_order" class="btn btn-primary">Узнать стоимость заказа</button>
+                <p class="mt-3">Стоимость заказа: {{ total_price }}</p>
+                <button type="submit" name="create_order" value="create_order" class="btn btn-success mt-3">Оформить заказ</button>
+            </form>
+            <a href="{% url 'hotels_list'%}" class="btn btn-danger position-absolute bottom-0 start-0 mb-4 ms-4">Отменить</a>
+        </div>
+    </div>
+{% endblock %}

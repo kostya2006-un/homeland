@@ -41,7 +41,7 @@
                             <p class="card-text"><strong>Цены от:</strong> {{ hotel.get_min_price }} руб. за ночь</p>
                             <div class="d-grid gap-2">
                                 <a href="{% url 'hotel_detail' hotel.pk %}" class="btn btn-primary mt-2">Подробнее об отеле</a>
-                                <a href="{% url 'apartaments' hotel.id %}" class="btn btn-success">Выбрать этот отель</a>
+                                <a href="{% url 'apartaments' hotel.id %}" class="btn btn-success">Посмотреть номера</a>
                             </div>
                         </div>
                     </div>

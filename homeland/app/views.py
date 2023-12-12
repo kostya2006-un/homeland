@@ -52,28 +52,31 @@ class Hotel_Detail_View(DetailView):
     context_object_name = 'hotel'
 
 class ApartamentView(View):
-
     template_name = 'app/apartament_list.html'
-    def get(self,request,pk):
-        hotel = Hotel.objects.get(pk = pk)
-        apartaments = Apartament.objects.filter(hotel = hotel)
+
+    def get(self, request, pk):
+        hotel = Hotel.objects.get(pk=pk)
+        apartaments = Apartament.objects.filter(hotel=hotel)
         form = PeopleNumberForm()
         context = {
-            'form':form,
-            'apartaments':apartaments,
+            'hotel':hotel,
+            'form': form,
+            'apartaments': apartaments,
         }
-        return render(request,self.template_name,context)
-    def post(self,request,pk):
+        return render(request, self.template_name, context)
 
-        form = PeopleNumberForm(data = request.POST)
+    def post(self, request, pk):
+        form = PeopleNumberForm(data=request.POST)
         if form.is_valid():
             number = form.cleaned_data['number']
+            hotel = Hotel.objects.get(pk=pk)
 
             context = {
-                'form':form,
-                'apartaments':Apartament.objects.filter(max_people = number,pk=pk),
+                'hotel':hotel,
+                'form': form,
+                'apartaments': Apartament.objects.filter(max_people=number, hotel=hotel),
             }
-            return render(request,self.template_name,context)
+            return render(request, self.template_name, context)
 class Apartament_Detail_View(DetailView):
     template_name = 'app/apartament_detail.html'
     model = Apartament
@@ -103,19 +106,23 @@ class IncrementBalance(View):
 class OrderView(View):
     template_name = 'app/order.html'
 
-    def get(self,request,pk):
+    def get(self, request, pk):
         form = DateForm()
         apartament = Apartament.objects.get(pk=pk)
+        total_price = 0
         context = {
-            'form':form,
-            'apartament':apartament,
+            'form': form,
+            'apartament': apartament,
+            'total_price': total_price
         }
-        return render(request,self.template_name,context)
+        return render(request, self.template_name, context)
 
-    def post(self,request,pk):
+    def post(self, request, pk):
         form = DateForm(data=request.POST)
         apartament = Apartament.objects.get(pk=pk)
+        total_price = 0
         profile = Profile.objects.get(user=request.user)
+
         if form.is_valid():
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date']
@@ -125,28 +132,34 @@ class OrderView(View):
             elif end_date <= start_date:
                 messages.error(request, "Дата выезда должна быть позже даты заезда.")
             else:
-                days = (end_date - start_date).days
-                total_price = apartament.price * days
+                if 'calculate_order' in request.POST:
+                    days = (end_date - start_date).days
+                    total_price = apartament.price * days
+                elif 'create_order' in request.POST:
+                    days = (end_date - start_date).days
+                    tot_price = apartament.price * days
 
-                if profile.money < total_price:
-                    messages.error(request, "Недостаточно средств")
-                else:
-                    profile.money -= total_price
-                    profile.save()
-                    Order.objects.create(
-                        user=request.user,
-                        apartament=apartament,
-                        arrive_date=start_date,
-                        leave_date=end_date,
-                        total_amount=total_price,
-                        status=Status.objects.get_or_create(status="неначатый")[0]
-                    )
-                    return redirect('profile')
+                    if profile.money < tot_price:
+                        messages.error(request, "Недостаточно средств")
+                    else:
+                        profile.money -= tot_price
+                        profile.save()
+                        Order.objects.create(
+                            user=request.user,
+                            apartament=apartament,
+                            arrive_date=start_date,
+                            leave_date=end_date,
+                            total_amount=tot_price,
+                            status=Status.objects.get_or_create(status="неначатый")[0]
+                        )
+                        return redirect('profile')
+
         context = {
-            'form':form,
+            'form': form,
             'apartament': apartament,
+            'total_price': total_price,
         }
-        return render(request,self.template_name,context)
+        return render(request, self.template_name, context)
 
 class OrderDeleteView(DeleteView):
     model = Order

@@ -7,33 +7,40 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     <div class="container">
-    <form method="post" class="mt-4 p-4 border border-primary rounded">
-        {% csrf_token %}
-        <div class="mb-3">
-            {{ form }}
+        <div class="row">
+            <div class="col-md-12">
+                <a href="{% url 'hotels_list' %}" class="btn btn-secondary float-end mt-4">Вернуться к выбору отеля</a>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Отсортировать</button>
 
-    </form>
-
+        <form method="post" class="mt-4 p-4">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form }}
+            </div>
+            <button type="submit" class="btn btn-primary">Отсортировать</button>
+            <p></p>
+            <a href="{% url 'apartaments' hotel.id %}" class="btn btn-secondary">Отменить фильтры</a>
+        </form>
+        {% if apartaments%}
         <h1 class="mt-4">Список номеров</h1>
         <div class="row">
             {% for apartament in apartaments %}
                 <div class="col-md-12 mt-4">
-                    <div class="card">
+                    <div class="card mb-3">
                         <div class="row g-0">
                             <div class="col-md-4">
                                 <img src="{{ apartament.img.url }}" class="img-fluid rounded-start" alt="Фото номера">
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ apartament.name }}</h5>
-                                    <p class="card-text">{{ apartament.category }}</p>
-                                    <p class="card-text">{{ apartament.hotel }}</p>
-                                    <p class="card-text">{{ apartament.price }}</p>
-                                    <p class="card-text">{{apartament.description}}</p>
-                                    <a href="{% url 'order' apartament.id %}" class="btn btn-primary">Забронировать</a>
-                                    <a href="{% url 'apartament_detail' apartament.pk %}">Подробнее об номере</a>
+                                    <h5 class="card-title">Название номера: {{ apartament.name }}</h5>
+                                    <p class="card-text">Категория: {{ apartament.category }}</p>
+
+                                    <p class="card-text">Цена за ночь: {{ apartament.price }} руб.</p>
+                                    <a href="{% url 'order' apartament.id %}" class="btn btn-success">Забронировать</a>
+                                    <p></p>
+                                    <a href="{% url 'apartament_detail' apartament.pk %}" class="btn btn-primary">Подробнее об номере</a>
                                 </div>
                             </div>
                         </div>
@@ -41,5 +48,8 @@
                 </div>
             {% endfor %}
         </div>
+        {% else %}
+        <h1>Ничего по данной категории не найдено</h1>
+        {% endif %}
     </div>
 {% endblock %}

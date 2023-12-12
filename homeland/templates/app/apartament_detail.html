@@ -19,6 +19,7 @@
                 <p>{{ apartament.description }}</p>
                 <p><strong>Цена за ночь:</strong> {{ apartament.price }}</p>
                 <p><strong>Максимальное число гостей:</strong> {{ apartament.max_people }}</p>
+                <a href="{% url 'order' apartament.id %}" class="btn btn-success">Забронировать</a>
             </div>
         </div>
     </div>
