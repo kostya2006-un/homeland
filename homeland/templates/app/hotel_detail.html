@@ -19,7 +19,7 @@
                 <p>{{ hotel.description }}</p>
                 <p><strong>Адрес:</strong> {{ hotel.address }}</p>
                 <p><strong>Цены от:</strong> {{ hotel.get_min_price }} руб. за ночь</p>
-                <a href="{% url 'apartaments' hotel.id %}" class="btn btn-success">Забронировать</a>
+                <a href="{% url 'apartaments' hotel.id %}" class="btn btn-success">Посмотреть список номеров</a>
             </div>
         </div>
     </div>

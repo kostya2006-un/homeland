@@ -1,6 +1,8 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import DeleteView, DetailView
 from .models import Hotel,Apartament,Profile,Order,Status
@@ -90,6 +92,8 @@ class Apartament_Detail_View(DetailView):
     template_name = 'app/apartament_detail.html'
     model = Apartament
     context_object_name = 'apartament'
+
+@method_decorator(login_required, name='dispatch')
 class ProfileView(View):
 
     template_name = 'app/profile.html'
@@ -104,6 +108,7 @@ class ProfileView(View):
 
         return render(request,self.template_name,context)
 
+@method_decorator(login_required, name='dispatch')
 class IncrementBalance(View):
     def get(self,request):
         profile = Profile.objects.get(user=request.user)
@@ -112,6 +117,7 @@ class IncrementBalance(View):
 
         return redirect('profile')
 
+@method_decorator(login_required, name='dispatch')
 class OrderView(View):
     template_name = 'app/order.html'
 
@@ -170,6 +176,7 @@ class OrderView(View):
         }
         return render(request, self.template_name, context)
 
+@method_decorator(login_required, name='dispatch')
 class OrderDeleteView(DeleteView):
     model = Order
     template_name = 'app/order_confirm_delete.html'
