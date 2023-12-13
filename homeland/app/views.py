@@ -68,15 +68,24 @@ class ApartamentView(View):
     def post(self, request, pk):
         form = PeopleNumberForm(data=request.POST)
         if form.is_valid():
-            number = form.cleaned_data['number']
             hotel = Hotel.objects.get(pk=pk)
+            number = form.cleaned_data['number']
+            category = form.cleaned_data['category']
+            res = Apartament.objects.filter(hotel=hotel)
+            if number and category:
+                res = Apartament.objects.filter(max_people=number, category=category, hotel=hotel)
+            elif number:
+                res = Apartament.objects.filter(max_people=number, hotel=hotel)
+            elif category:
+                res = Apartament.objects.filter(category=category, hotel=hotel)
 
             context = {
-                'hotel':hotel,
+                'hotel': hotel,
                 'form': form,
-                'apartaments': Apartament.objects.filter(max_people=number, hotel=hotel),
+                'apartaments': res,
             }
             return render(request, self.template_name, context)
+
 class Apartament_Detail_View(DetailView):
     template_name = 'app/apartament_detail.html'
     model = Apartament

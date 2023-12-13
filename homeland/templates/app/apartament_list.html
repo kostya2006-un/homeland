@@ -7,18 +7,31 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <a href="{% url 'hotels_list' %}" class="btn btn-secondary float-end mt-4">Вернуться к выбору отеля</a>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item mx-2">
+                        <a class="btn btn-primary" href="{% url 'index' %}">Главная</a>
+                    </li>
+                     <li class="nav-item mx-2">
+                        <a class="btn btn-primary" href="{% url 'hotels_list' %}">Вернуться к выбору отеля</a>
+                    </li>
+                    <!-- Add other navbar links if needed -->
+                </ul>
             </div>
         </div>
-
+    </nav>
         <form method="post" class="mt-4 p-4">
             {% csrf_token %}
             <div class="mb-3">
                 {{ form }}
             </div>
-            <button type="submit" class="btn btn-primary">Отсортировать</button>
+            <button type="submit" class="btn btn-primary">Отфильтровать</button>
             <p></p>
             <a href="{% url 'apartaments' hotel.id %}" class="btn btn-secondary">Отменить фильтры</a>
         </form>

@@ -1,10 +1,23 @@
 {% extends 'app/base.html' %}
 
 {% block content %}
-  <h2>Вы уверены, что хотите отменить этот заказ?</h2>
-  <form method="post">
-    {% csrf_token %}
-    <button type="submit">Удалить</button>
-    <a href="{% url 'profile' %}">Отмена</a>
-  </form>
+    {% load bootstrap5 %}
+
+    {# Load CSS and JavaScript #}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+  <div class="container text-center mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card p-4">
+          <h2 class="mb-4">Вы уверены, что хотите отменить этот заказ?</h2>
+          <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger me-2">Удалить</button>
+            <a href="{% url 'profile' %}" class="btn btn-secondary">Отмена</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
