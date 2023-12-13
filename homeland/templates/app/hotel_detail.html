@@ -23,4 +23,22 @@
             </div>
         </div>
     </div>
+<div>
+    <h2>Отзывы</h2>
+    {% for review in reviews %}
+        <p>{{review.user}}</p>
+        <p>{{ review.text }}</p>
+    {% empty %}
+        <p>Нет отзывов.</p>
+    {% endfor %}
+</div>
+
+<div>
+    <h2>Написать отзыв</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Отправить отзыв</button>
+    </form>
+</div>
 {%endblock%}

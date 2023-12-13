@@ -1,5 +1,5 @@
 from django import forms
-from .models import Country,NumberPeople,Category
+from .models import Country,NumberPeople,Category,Review
 
 class CountryForm(forms.Form):
     name = forms.ModelChoiceField(queryset=Country.objects.all(),label='Выберите страну вашего отеля')
@@ -17,3 +17,9 @@ class DateForm(forms.Form):
         label='Выберите дату выезда',
         widget=forms.DateInput(attrs={'type': 'date'})
     )
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['text']
+        labels = {'text': 'Текст отзыва'}

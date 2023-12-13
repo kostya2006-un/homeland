@@ -33,6 +33,12 @@ class Hotel(models.Model):
         min_price = self.apartament_set.aggregate(min_price=Min('price'))['min_price']
         return min_price if min_price is not None else 0
 
+class Review(models.Model):
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
 class Category(models.Model):
     name = models.CharField(max_length=55)
 

@@ -5,8 +5,8 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import DeleteView, DetailView
-from .models import Hotel,Apartament,Profile,Order,Status
-from .forms import CountryForm,PeopleNumberForm,DateForm
+from .models import Hotel,Apartament,Profile,Order,Status,Review
+from .forms import CountryForm,PeopleNumberForm,DateForm,ReviewForm
 from django.utils import timezone
 class IndexView(View):
     template_name = 'app/index.html'
@@ -48,10 +48,38 @@ class HotelListView(View):
             }
             return render(request,self.template_name,context)
 
-class Hotel_Detail_View(DetailView):
+class Hotel_Detail_View(View):
     template_name = 'app/hotel_detail.html'
-    model = Hotel
-    context_object_name = 'hotel'
+
+    def get(self, request, *args, **kwargs):
+        hotel = Hotel.objects.get(pk=kwargs['pk'])
+        reviews = Review.objects.filter(hotel=hotel)
+        form = ReviewForm()
+        context = {
+            'hotel': hotel,
+            'reviews': reviews,
+            'form': form,
+        }
+        return render(request, self.template_name, context)
+    @method_decorator(login_required, name='dispatch')
+    def post(self, request, *args, **kwargs):
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            hotel = Hotel.objects.get(pk=kwargs['pk'])
+            review = form.save(commit=False)
+            review.hotel = hotel
+            review.user = request.user
+            review.save()
+            return redirect('hotel_detail', pk=kwargs['pk'])
+
+        hotel = Hotel.objects.get(pk=kwargs['pk'])
+        reviews = Review.objects.filter(hotel=hotel)
+        context = {
+            'hotel': hotel,
+            'reviews': reviews,
+            'form': form,
+        }
+        return render(request, self.template_name, context)
 
 class ApartamentView(View):
     template_name = 'app/apartament_list.html'
