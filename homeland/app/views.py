@@ -220,3 +220,5 @@ class OrderDeleteView(DeleteView):
         profile.save()
 
         return super().form_valid(form)
+
+

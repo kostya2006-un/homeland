@@ -23,3 +23,6 @@ class ReviewForm(forms.ModelForm):
         model = Review
         fields = ['text']
         labels = {'text': 'Текст отзыва'}
+        widgets = {
+            'text': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }

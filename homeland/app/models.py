@@ -39,6 +39,9 @@ class Review(models.Model):
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.text
+
 class Category(models.Model):
     name = models.CharField(max_length=55)
 
@@ -81,3 +84,4 @@ class Order(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     money = models.PositiveIntegerField(default=10000)
+
