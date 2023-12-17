@@ -2,6 +2,7 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from .views import IndexView,HotelListView,ApartamentView,ProfileView,IncrementBalance,OrderView,OrderDeleteView,Hotel_Detail_View,Apartament_Detail_View
+from app.drf_view import HotelApiView,HotelDetailApiView,CountryApiView
 urlpatterns = [
     path('',IndexView.as_view(),name = 'index'),
     path('hotels/',HotelListView.as_view(),name = 'hotels_list'),
@@ -11,7 +12,11 @@ urlpatterns = [
     path('profile/',ProfileView.as_view(),name = 'profile'),
     path('increment_balance',IncrementBalance.as_view(),name = 'increment_balance'),
     path('create_order/<int:pk>/',OrderView.as_view(),name = 'order'),
-    path('order_delete/<int:pk>/',OrderDeleteView.as_view(),name = 'order_delete')
+    path('order_delete/<int:pk>/',OrderDeleteView.as_view(),name = 'order_delete'),
+    #----------- API ----------------
+    path('api/v1/hotellist/',HotelApiView.as_view()),
+    path('api/v1/hotellist/<int:pk>/',HotelDetailApiView.as_view()),
+    path('api/v1/countries',CountryApiView.as_view()),
 ]
 
 if settings.DEBUG:
