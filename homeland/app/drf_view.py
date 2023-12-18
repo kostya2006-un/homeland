@@ -1,7 +1,9 @@
+from rest_framework import status
 from rest_framework.views import APIView
-from app.models import Hotel,Country
+from app.models import Hotel,Country,Apartament,Review
 from rest_framework.response import Response
-from app.serializers import HotelListSerializer,HotelDetailSerializer,CountrySerializer
+from app.serializers import HotelListSerializer,HotelDetailSerializer,CountrySerializer,ApartamentSerializer,ApartamentDetailSerializer
+from app.serializers import ReviewSerializer
 
 class HotelApiView(APIView):
     def get(self,request):
@@ -21,4 +23,23 @@ class CountryApiView(APIView):
     def get(self,request):
         countries = Country.objects.all()
         serializer = CountrySerializer(countries,many=True)
+        return Response(serializer.data)
+
+class ApartamentApiView(APIView):
+    def get(self,request,pk):
+        hotel = Hotel.objects.get(pk=pk)
+        apartaments = Apartament.objects.filter(hotel=hotel)
+        serializer = ApartamentSerializer(apartaments,many=True)
+        return Response(serializer.data)
+
+class ApartamentDetailApiView(APIView):
+    def get(self,request,pk):
+        apartament = Apartament.objects.get(pk=pk)
+        serializer = ApartamentDetailSerializer(apartament)
+        return Response(serializer.data)
+
+class ReviewApiView(APIView):
+    def get(self,request):
+        reviews = Review.objects.all()
+        serializer = ReviewSerializer(reviews,many=True)
         return Response(serializer.data)
