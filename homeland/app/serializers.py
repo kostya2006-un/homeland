@@ -39,8 +39,8 @@ class ApartamentDetailSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 class ReviewSerializer(serializers.ModelSerializer):
-    hotel = serializers.SlugRelatedField(slug_field='hotel_name', read_only=True)
-    user = serializers.SlugRelatedField(slug_field='username',read_only=True)
+    #hotel = serializers.SlugRelatedField(slug_field='hotel_name', read_only=True)
+    # user = serializers.SlugRelatedField(slug_field='username',read_only=True)
     class Meta:
         model = Review
         fields = ('__all__')

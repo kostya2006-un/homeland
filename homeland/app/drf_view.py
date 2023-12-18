@@ -1,4 +1,5 @@
-from rest_framework import status
+from django.contrib.auth.models import User
+from rest_framework import status, generics
 from rest_framework.views import APIView
 from app.models import Hotel,Country,Apartament,Review
 from rest_framework.response import Response
@@ -38,8 +39,9 @@ class ApartamentDetailApiView(APIView):
         serializer = ApartamentDetailSerializer(apartament)
         return Response(serializer.data)
 
-class ReviewApiView(APIView):
-    def get(self,request):
-        reviews = Review.objects.all()
-        serializer = ReviewSerializer(reviews,many=True)
-        return Response(serializer.data)
+class ReviewApiView(generics.ListCreateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+
+
