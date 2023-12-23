@@ -3,7 +3,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from .views import IndexView,HotelListView,ApartamentView,ProfileView,IncrementBalance,OrderView,OrderDeleteView,Hotel_Detail_View,Apartament_Detail_View
 from app.drf_view import HotelApiView,HotelDetailApiView,CountryApiView,ApartamentApiView,ApartamentDetailApiView,ReviewApiView
-from app.drf_view import ProfileViewApi,OrderApiView
+from app.drf_view import ProfileViewApi,AllOrdersApiView,OrderApiView
 urlpatterns = [
     path('',IndexView.as_view(),name = 'index'),
     path('hotels/',HotelListView.as_view(),name = 'hotels_list'),
@@ -22,6 +22,7 @@ urlpatterns = [
     path('api/v1/apartament_detail/<int:pk>/',ApartamentDetailApiView.as_view()),
     path('api/v1/reviews/',ReviewApiView.as_view()),
     path('api/v1/profile/',ProfileViewApi.as_view()),
+    path('api/v1/all_orders/',AllOrdersApiView.as_view()),
     path('api/v1/orders/',OrderApiView.as_view()),
 ]
 

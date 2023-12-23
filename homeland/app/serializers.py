@@ -54,7 +54,7 @@ class ProfileViewSerializer(serializers.ModelSerializer):
         fields = ('__all__')
         read_only_fields = ('user',)
 
-class OrderSerializer(serializers.ModelSerializer):
+class AllOrdersSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(slug_field='username', read_only=True)
     apartament = serializers.SlugRelatedField(slug_field='name', read_only=True)
     status = serializers.SlugRelatedField(slug_field='status', read_only=True)
@@ -62,4 +62,24 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ('__all__')
+
+class OrderSerializer(serializers.ModelSerializer):
+    #user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    user = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    class Meta:
+        model = Order
+        fields = ('__all__')
+        read_only_fields = ('user','total_amount', )
+
+    def create(self, validated_data):
+        # Вычисление total_amount
+        apartament = validated_data['apartament']
+        arrive_date = validated_data['arrive_date']
+        leave_date = validated_data['leave_date']
+        days = (leave_date - arrive_date).days
+        validated_data['total_amount'] = apartament.price * days
+
+        return super().create(validated_data)
+
+
 

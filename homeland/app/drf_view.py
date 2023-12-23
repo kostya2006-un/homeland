@@ -1,10 +1,11 @@
 from django.contrib.auth.models import User
 from rest_framework import status, generics
+from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
 from app.models import Hotel,Country,Apartament,Review,Profile,Order
 from rest_framework.response import Response
 from app.serializers import HotelListSerializer,HotelDetailSerializer,CountrySerializer,ApartamentSerializer,ApartamentDetailSerializer
-from app.serializers import ReviewSerializer,ProfileViewSerializer,OrderSerializer
+from app.serializers import ReviewSerializer,ProfileViewSerializer,AllOrdersSerializer,OrderSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAuthenticated,IsAdminUser
 
 class HotelApiView(APIView):
@@ -65,10 +66,34 @@ class ProfileViewApi(APIView):
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class OrderApiView(generics.ListAPIView):
+class AllOrdersApiView(generics.ListAPIView):
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_class = AllOrdersSerializer
     permission_classes = (IsAdminUser,)
+
+class OrderApiView(generics.ListCreateAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        user = self.request.user
+        return Order.objects.filter(user=user)
+
+    def perform_create(self, serializer):
+        apartament = serializer.validated_data['apartament']
+        arrive_date = serializer.validated_data['arrive_date']
+        leave_date = serializer.validated_data['leave_date']
+        days = (leave_date - arrive_date).days
+        total_price = apartament.price * days
+
+        profile = self.request.user.profile
+        if profile.money >= total_price:
+            profile.money -= total_price
+            profile.save()
+            serializer.save(user=self.request.user,total_amount=total_price)
+        else:
+            raise ValidationError("Недостаточно средств для обработки заказа")
+
 
 
 
