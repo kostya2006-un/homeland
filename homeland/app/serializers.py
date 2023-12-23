@@ -81,5 +81,13 @@ class OrderSerializer(serializers.ModelSerializer):
 
         return super().create(validated_data)
 
+class OrderDetailSerializer(serializers.ModelSerializer):
+
+    user = serializers.SlugRelatedField(slug_field='username', read_only=True)
+    class Meta:
+        model = Order
+        fields = ('__all__')
+
+
 
 

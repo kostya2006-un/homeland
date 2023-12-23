@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from app.models import Hotel,Country,Apartament,Review,Profile,Order
 from rest_framework.response import Response
 from app.serializers import HotelListSerializer,HotelDetailSerializer,CountrySerializer,ApartamentSerializer,ApartamentDetailSerializer
-from app.serializers import ReviewSerializer,ProfileViewSerializer,AllOrdersSerializer,OrderSerializer
+from app.serializers import ReviewSerializer,ProfileViewSerializer,AllOrdersSerializer,OrderSerializer,OrderDetailSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAuthenticated,IsAdminUser
 
 class HotelApiView(APIView):
@@ -94,6 +94,20 @@ class OrderApiView(generics.ListCreateAPIView):
         else:
             raise ValidationError("Недостаточно средств для обработки заказа")
 
+class OrderDetailApiView(generics.RetrieveDestroyAPIView):
+    serializer_class = OrderDetailSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        user = self.request.user
+        return Order.objects.filter(user=user)
+
+    def perform_destroy(self, instance):
+        profile = self.request.user.profile
+        total_amount = instance.total_amount
+        profile.money += total_amount
+        profile.save()
+        instance.delete()
 
 
 
