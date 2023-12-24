@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django_filters import rest_framework as filters
 from rest_framework import status, generics
 from rest_framework.exceptions import ValidationError
 from rest_framework.views import APIView
@@ -7,12 +7,13 @@ from rest_framework.response import Response
 from app.serializers import HotelListSerializer,HotelDetailSerializer,CountrySerializer,ApartamentSerializer,ApartamentDetailSerializer
 from app.serializers import ReviewSerializer,ProfileViewSerializer,AllOrdersSerializer,OrderSerializer,OrderDetailSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAuthenticated,IsAdminUser
+from app.services import HotelFilter,ApartamentFilter
 
-class HotelApiView(APIView):
-    def get(self,request):
-        hotels = Hotel.objects.all()
-        serializer = HotelListSerializer(hotels,many=True)
-        return Response(serializer.data)
+class HotelApiView(generics.ListAPIView):
+    queryset = Hotel.objects.all()
+    serializer_class = HotelListSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = HotelFilter
 
 class HotelDetailApiView(APIView):
 
@@ -28,12 +29,15 @@ class CountryApiView(APIView):
         serializer = CountrySerializer(countries,many=True)
         return Response(serializer.data)
 
-class ApartamentApiView(APIView):
-    def get(self,request,pk):
+class ApartamentApiView(generics.ListAPIView):
+    serializer_class = ApartamentSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = ApartamentFilter
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
         hotel = Hotel.objects.get(pk=pk)
-        apartaments = Apartament.objects.filter(hotel=hotel)
-        serializer = ApartamentSerializer(apartaments,many=True)
-        return Response(serializer.data)
+        return Apartament.objects.filter(hotel=hotel)
 
 class ApartamentDetailApiView(APIView):
     def get(self,request,pk):

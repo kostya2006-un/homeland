@@ -25,7 +25,7 @@ class CountrySerializer(serializers.ModelSerializer):
 class ApartamentSerializer(serializers.ModelSerializer):
     category = serializers.SlugRelatedField(slug_field='name',read_only=True)
     hotel = serializers.SlugRelatedField(slug_field='hotel_name',read_only=True)
-
+    max_people = serializers.SlugRelatedField(slug_field='number',read_only=True)
     class Meta:
         model = Apartament
         fields = ('__all__')

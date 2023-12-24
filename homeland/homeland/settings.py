@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'rest_framework',
+    'django_filters',
     'bootstrap5',
     'app',
 ]
@@ -164,3 +165,9 @@ ACCOUNT_FORMS = {
 }
 #celery and redis
 CELERY_BROKER_URL = 'redis://redis:6379'
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+}
