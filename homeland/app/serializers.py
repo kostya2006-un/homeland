@@ -1,5 +1,10 @@
 from rest_framework import serializers
 from .models import Hotel,Country,Apartament,Review,Profile,Order
+from djoser.serializers import UserCreateSerializer
+
+class CustomUserCreateSerializer(UserCreateSerializer):
+    class Meta(UserCreateSerializer.Meta):
+        fields = ('email', 'username', 'password', 'first_name', 'last_name')
 
 class HotelListSerializer(serializers.ModelSerializer):
     city = serializers.SlugRelatedField(slug_field='city_name',read_only=True)

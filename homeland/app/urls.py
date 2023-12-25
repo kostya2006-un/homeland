@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 from .views import IndexView,HotelListView,ApartamentView,ProfileView,IncrementBalance,OrderView,OrderDeleteView,Hotel_Detail_View,Apartament_Detail_View
@@ -25,6 +25,10 @@ urlpatterns = [
     path('api/v1/all_orders/',AllOrdersApiView.as_view()),
     path('api/v1/orders/',OrderApiView.as_view()),
     path('api/v1/order_detail/<int:pk>/',OrderDetailApiView.as_view()),
+    # ------api auth ---------
+    path('auth/',include('djoser.urls')),
+    path('auth/',include('djoser.urls.authtoken')),
+    path('auth/',include('djoser.urls.jwt')),
 ]
 
 if settings.DEBUG:
