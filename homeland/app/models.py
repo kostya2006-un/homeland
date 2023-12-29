@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-
-# Create your models here.
+from django.db.models import Avg
 from django.db.models import Min
 from django.utils import timezone
 
@@ -32,6 +31,15 @@ class Hotel(models.Model):
     def get_min_price(self):
         min_price = self.apartament_set.aggregate(min_price=Min('price'))['min_price']
         return min_price if min_price is not None else 0
+
+    def get_rating(self):
+        rating_avg = HotelRating.objects.filter(hotel=self).aggregate(avg_rating=Avg('rating'))
+        return rating_avg['avg_rating']
+
+class HotelRating(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
 
 class Review(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
@@ -65,6 +73,7 @@ class Apartament(models.Model):
 
     def __str__(self):
         return f'{self.name} | {self.hotel}'
+
 class Status(models.Model):
     status = models.CharField(max_length=30)
 
@@ -84,4 +93,6 @@ class Order(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     money = models.PositiveIntegerField(default=10000)
+
+
 

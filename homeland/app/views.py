@@ -5,8 +5,8 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import DeleteView, DetailView
-from .models import Hotel,Apartament,Profile,Order,Status,Review
-from .forms import CountryForm,PeopleNumberForm,DateForm,ReviewForm
+from .models import Hotel, Apartament, Profile, Order, Status, Review, HotelRating
+from .forms import CountryForm, PeopleNumberForm, DateForm, ReviewForm, HotelRatingForm
 from django.utils import timezone
 class IndexView(View):
     template_name = 'app/index.html'
@@ -48,6 +48,7 @@ class HotelListView(View):
             }
             return render(request,self.template_name,context)
 
+
 class Hotel_Detail_View(View):
     template_name = 'app/hotel_detail.html'
 
@@ -55,12 +56,22 @@ class Hotel_Detail_View(View):
         hotel = Hotel.objects.get(pk=kwargs['pk'])
         reviews = Review.objects.filter(hotel=hotel)
         form = ReviewForm()
+
+        # Получаем оценку текущего пользователя для отеля (если она существует)
+        user_rating = HotelRating.objects.filter(hotel=hotel, user=request.user).first()
+        if user_rating:
+            rating_form = HotelRatingForm(instance=user_rating)
+        else:
+            rating_form = HotelRatingForm()
+
         context = {
             'hotel': hotel,
             'reviews': reviews,
             'form': form,
+            'rating_form': rating_form,
         }
         return render(request, self.template_name, context)
+
     @method_decorator(login_required, name='dispatch')
     def post(self, request, *args, **kwargs):
         form = ReviewForm(request.POST)
@@ -72,12 +83,22 @@ class Hotel_Detail_View(View):
             review.save()
             return redirect('hotel_detail', pk=kwargs['pk'])
 
+        rating_form = HotelRatingForm(request.POST)
+        if rating_form.is_valid():
+            hotel = Hotel.objects.get(pk=kwargs['pk'])
+            rating = rating_form.save(commit=False)
+            rating.hotel = hotel
+            rating.user = request.user
+            rating.save()
+            return redirect('hotel_detail', pk=kwargs['pk'])
+
         hotel = Hotel.objects.get(pk=kwargs['pk'])
         reviews = Review.objects.filter(hotel=hotel)
         context = {
             'hotel': hotel,
             'reviews': reviews,
             'form': form,
+            'rating_form': rating_form,
         }
         return render(request, self.template_name, context)
 

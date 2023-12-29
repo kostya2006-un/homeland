@@ -57,6 +57,7 @@
                             <p class="card-text"><strong>Город:</strong> {{ hotel.city }}</p>
                             <p class="card-text"><strong>Страна:</strong> {{ hotel.country }}</p>
                             <p class="card-text"><strong>Цены от:</strong> {{ hotel.get_min_price }} руб. за ночь</p>
+                            <p class="card-text"><strong>Средняя оценка: </strong> <h2>{{ hotel.average_rating }}</h2></p>
                             <div class="d-grid gap-2">
                                 <a href="{% url 'hotel_detail' hotel.pk %}" class="btn btn-primary mt-2">Подробнее об отеле</a>
                                 <a href="{% url 'apartaments' hotel.id %}" class="btn btn-success">Посмотреть номера</a>
