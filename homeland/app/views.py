@@ -84,15 +84,20 @@ class Hotel_Detail_View(View):
             return redirect('hotel_detail', pk=kwargs['pk'])
 
         rating_form = HotelRatingForm(request.POST)
+        hotel = Hotel.objects.get(pk=kwargs['pk'])
         if rating_form.is_valid():
-            hotel = Hotel.objects.get(pk=kwargs['pk'])
-            rating = rating_form.save(commit=False)
-            rating.hotel = hotel
-            rating.user = request.user
-            rating.save()
+            rating, created = HotelRating.objects.get_or_create(
+                hotel=hotel,
+                user=request.user,
+                defaults={'rating': rating_form.cleaned_data['rating']}  # Сохраняем рейтинг из формы
+            )
+            if not created:
+                rating.rating = rating_form.cleaned_data[
+                    'rating']  # Если оценка уже существует, обновляем значение рейтинга
+                rating.save()
+
             return redirect('hotel_detail', pk=kwargs['pk'])
 
-        hotel = Hotel.objects.get(pk=kwargs['pk'])
         reviews = Review.objects.filter(hotel=hotel)
         context = {
             'hotel': hotel,

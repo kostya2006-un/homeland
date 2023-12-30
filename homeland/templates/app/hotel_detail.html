@@ -25,14 +25,19 @@
                 <a href="{% url 'apartaments' hotel.id %}" class="btn btn-success">Посмотреть список номеров</a>
             </div>
         </div>
+       <div class="container">
+    <div class="container__items">
         <form method="post">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="id_rating" class="form-label">Оценка отеля (от 1 до 5)</label>
-                        {{ rating_form.as_p }}
-                    </div>
-                    <button class="btn btn-primary" type="submit">Оценить</button>
-                </form>
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_rating" class="form-label">Оценка отеля (от 1 до 5)</label>
+                {{ rating_form.as_p }}
+            </div>
+            <button class="btn btn-primary" type="submit">Оценить</button>
+        </form>
+    </div>
+</div>
+
         <div class="mt-5">
             <div class="mb-4">
                 <h2>Написать отзыв</h2>
