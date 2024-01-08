@@ -15,9 +15,9 @@ urlpatterns = [
     path('create_order/<int:pk>/',OrderView.as_view(),name = 'order'),
     path('order_delete/<int:pk>/',OrderDeleteView.as_view(),name = 'order_delete'),
     #----------- API ----------------
-    path('api/v1/hotellist/',HotelApiView.as_view()),
-    path('api/v1/hotellist/<int:pk>/',HotelDetailApiView.as_view()),
-    path('api/v1/countries',CountryApiView.as_view()),
+    path('api/v1/hotellist/',HotelApiView.as_view(),name = 'hotellist'),
+    path('api/v1/hotellist/<int:pk>/',HotelDetailApiView.as_view(),name = 'hotel-detail'),
+    path('api/v1/countries',CountryApiView.as_view(),name = 'countries'),
     path('api/v1/apartaments/<int:pk>/',ApartamentApiView.as_view()),
     path('api/v1/apartament_detail/<int:pk>/',ApartamentDetailApiView.as_view()),
     path('api/v1/reviews/',ReviewApiView.as_view()),
