@@ -61,7 +61,7 @@ class ApartamentViewTestCase(TestCase):
         self.city = City.objects.create(city_name='Москва')
         self.hotel = Hotel.objects.create(hotel_name='hotel1', city=self.city,
                                           country=self.country,
-                                          description='фысыв', address='фываыфва')
+                                          description='1', address='фываыфва')
         self.max_people = NumberPeople.objects.create(number = '2')
         self.category = Category.objects.create(name = 'обычный')
         self.apartament = Apartament.objects.create(name = 'test', hotel=self.hotel, category = self.category,
