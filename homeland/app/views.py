@@ -8,6 +8,8 @@ from django.views.generic import DeleteView, DetailView
 from .models import Hotel, Apartament, Profile, Order, Status, Review, HotelRating
 from .forms import CountryForm, PeopleNumberForm, DateForm, ReviewForm, HotelRatingForm
 from django.utils import timezone
+
+
 class IndexView(View):
     template_name = 'app/index.html'
 
