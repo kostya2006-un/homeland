@@ -77,7 +77,7 @@ class Hotel_Detail_View(View):
         return render(request, self.template_name, context)
 
     @method_decorator(login_required, name='dispatch')
-    def post(self, request, *args, **kwargs):
+    def post(self, request, **kwargs):
         form = ReviewForm(request.POST)
         if form.is_valid():
             hotel = Hotel.objects.get(pk=kwargs['pk'])
