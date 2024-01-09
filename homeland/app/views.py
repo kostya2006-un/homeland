@@ -50,6 +50,8 @@ class HotelListView(View):
             }
             return render(request,self.template_name,context)
 
+        return render(request, self.template_name, {'form': form})
+
 
 class Hotel_Detail_View(View):
     template_name = 'app/hotel_detail.html'
@@ -143,6 +145,8 @@ class ApartamentView(View):
                 'apartaments': res,
             }
             return render(request, self.template_name, context)
+
+        return render(request, self.template_name, {'form': form})
 
 class Apartament_Detail_View(DetailView):
     template_name = 'app/apartament_detail.html'
