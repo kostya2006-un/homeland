@@ -1,1 +1,3 @@
 .idea
+/homeland/app/migrations
+/homeland/db.sqlite3
