@@ -19,7 +19,7 @@
 4. Установите зависимости:
 
     `pip install -r requirements.txt`
-   1. Перейдите в каталог проекта:
+5. Перейдите в каталог проекта:
 
    `cd homeland`
 
@@ -61,10 +61,10 @@
 
 Сделайте форк репозитория.
 
-Создайте новую ветку: git checkout -b feature/your-feature.
+Создайте новую ветку: `git checkout -b feature/your-feature.`
 
-Внесите изменения и закоммитьте их: git commit -m 'Добавить новую функцию'.
+Внесите изменения и закоммитьте их: `git commit -m 'Добавить новую функцию'.`
 
-Отправьте ветку: git push origin feature/your-feature.
+Отправьте ветку: `git push origin feature/your-feature.`
 
 Создайте pull request.
