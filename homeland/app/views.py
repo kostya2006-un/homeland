@@ -56,6 +56,7 @@ class HotelListView(View):
 class Hotel_Detail_View(View):
     template_name = 'app/hotel_detail.html'
 
+    @method_decorator(login_required, name='dispatch')
     def get(self, request, *args, **kwargs):
         hotel = Hotel.objects.get(pk=kwargs['pk'])
         reviews = Review.objects.filter(hotel=hotel)
